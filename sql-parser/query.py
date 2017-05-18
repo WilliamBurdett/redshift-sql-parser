@@ -33,8 +33,8 @@ class Query:
         return False
 
     @staticmethod
-    def check_sql_list(sql_list, allow_quotes = False):
-        values = sql_list.split(',')
+    def check_sql_list(sql_statement, allow_quotes = False):
+        values = sql_statement.split(',')
         for value in values:
             value = value.strip()
             has_whitespace = False
@@ -46,6 +46,25 @@ class Query:
             if has_whitespace:
                 return 1
         return 0
+
+    @staticmethod
+    def get_bracket_groupings(sql_statement, checker_function):
+        return 2
+
+    @staticmethod
+    def check_conditionals(sql_statement):
+        operators = ['=', '!=', '>', '<', '>=', '<=']
+        groupings = ['AND', 'OR']
+
+        bracket_stack = []
+
+        for character in sql_statement:
+            if character == '(':
+                bracket_stack.append('')
+
+        return 2
+        # x = y, x != y
+        # (x = y) AND (x = z OR x != b)
 
 
 class Select(Query):
