@@ -1,4 +1,8 @@
-import utility
+from component import Component
+from table_name import TableName
+from utility import get_string_between_substrings, get_string_after_substring, \
+    get_next_section
+from column_list import ColumnList
 from parse_error import ParseError
 from abc import ABCMeta, abstractmethod
 from reserved_keywords import reserved_keywords
@@ -19,8 +23,8 @@ def query_factory(sql):
 class Query:
     __metaclass__ = ABCMeta
 
-    def __init__(self, query):
-        self.query = query
+    def __init__(self, sql):
+        self.sql = sql
 
     @abstractmethod
     def check_query(self):
@@ -32,52 +36,46 @@ class Query:
             return True
         return False
 
-    @staticmethod
-    def check_sql_list(sql_statement, allow_quotes = False):
-        values = sql_statement.split(',')
-        for value in values:
-            value = value.strip()
-            has_whitespace = False
-            if not value == utility.remove_all_whitespace_characters(value):
-                has_whitespace = True
-            if allow_quotes:
-                if value[0] == '"' and value[-1:] == '"' and value.count('"') == 2:
-                    has_whitespace = False
-            if has_whitespace:
-                return 1
-        return 0
 
-    @staticmethod
-    def get_bracket_groupings(sql_statement, checker_function):
-        return 2
+class Select(Component):
+    keyword_order = ['SELECT', 'FROM', 'JOIN', 'WHERE', 'ORDER BY']
 
-    @staticmethod
-    def check_conditionals(sql_statement):
-        operators = ['=', '!=', '>', '<', '>=', '<=']
-        groupings = ['AND', 'OR']
+    def __init__(self, component_string):
+        super().__init__(component_string)
+        if component_string[0] == '(':
+            self.sql = self.sql[1:-1]
 
-        bracket_stack = []
+    def check_validity(self):
+        components = []
+        moving_sql = self.sql
+        component_string = get_string_between_substrings(moving_sql, 'SELECT',
+                                                         'FROM')
+        moving_sql = get_string_after_substring(moving_sql, component_string)
+        components.append(ColumnList(component_string, True))
+        component_string = get_next_section(moving_sql, 'FROM', ['JOIN',
+                                                                 'WHERE',
+                                                                 'ORDER BY'])
+        if component_string[0] == '(':
+            components.append(Select(component_string))
+        else:
+            components.append(TableName(component_string))
 
-        for character in sql_statement:
-            if character == '(':
-                bracket_stack.append('')
+        for component in components:
+            component.check_validity()
 
-        return 2
-        # x = y, x != y
-        # (x = y) AND (x = z OR x != b)
+        for component in components:
+            if component.is_valid is None:
+                self.is_valid = False
+                print("I didn't finish?")
+            elif not component.is_valid:
+                self.is_valid = False
+                print("OH NO")
+        if self.is_valid is None:
+            self.is_valid = True
 
+        # get next keyword
 
-class Select(Query):
-    def check_query(self):
-        column_string = utility.find_between(self.query, 'SELECT', 'FROM')
-        if len(column_string)-2 < len(column_string.strip()):
-            return 1
-        if not column_string.strip() == '*':
-            self.check_sql_list(column_string)
-
-        rest_of_query = utility.get_string_after_substring(self.query, 'FROM')
-
-        return 2
+        pass
 
 
 class Insert(Query):
@@ -88,9 +86,6 @@ class Insert(Query):
 class With(Query):
     def check_query(self):
         pass
-
-
-
 
 # SELECT QUERY:
 # SELECT (comma separated columns or *)

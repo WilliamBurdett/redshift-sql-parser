@@ -1,8 +1,8 @@
 import sql_parser
-import unittest
+from unittest import TestCase
 
 
-class TestSqlParser(unittest.TestCase):
+class TestSqlParser(TestCase):
 
     def test_happy_path(self):
         actual_input = '''

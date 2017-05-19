@@ -1,24 +1,34 @@
 from utility import check_bracket_order
+from component import Component
 
 
-class Conditional:
-    def __init__(self, conditional_string):
-        self.conditional = conditional_string
+class Conditional(Component):
+    operators = ['>=', '<=', '!=', '=', '>', '<']
 
-    def check_conditional(self):
-        
+    def check_validity(self):
+        if not self.sql[0].isspace():
+            return 1
+        elif not self.sql[-1:].isspace():
+            return 1
+        fields = []
+        for operator in self.operators:
+            if operator in self.sql:
+                fields = self.sql.split(operator)
+
         return 2
 
 
-class ConditionalSection:
-    def __init__(self, conditional_section):
-        self.conditional_section = conditional_section
+class ConditionalSection(Component):
+    def check_validity(self):
+        if check_bracket_order(self.sql) == 1:
+            return 1
 
-    def check_conditionals(self):
-        check_bracket_order(self.conditional_section)
-
+        # Once we check the bracket format, they are unimportant on
+        # if the query will compile
+        bracket_replaced = self.sql.replace('(', ' ') \
+            .replace(')', ' ')
         conditionals = []
-        for and_split in self.conditional_section.split('AND'):
+        for and_split in bracket_replaced.split('AND'):
             for or_split in and_split.split('OR'):
                 conditionals.append(Conditional(or_split))
         for conditional in conditionals:

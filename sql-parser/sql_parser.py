@@ -12,3 +12,16 @@ def run_parser(sql):
         print(query.message)
         return 1
     return 0
+
+
+string = 'schema.table alias'
+print(string[1:])
+list = string.split('"')
+print(list)
+
+# list['', 'schema', '.', 'table', ' ', 'alias', '']
+
+# 1 = schema
+# 2 = period
+# 3 = tablename
+# 4 = alias
