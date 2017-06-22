@@ -1,8 +1,8 @@
 from query import Query, Select
-import unittest
+from unittest import TestCase, main
 
 
-class TestQuery(unittest.TestCase):
+class TestQuery(TestCase):
 
     def test_is_reserved_returns_true(self):
         actual_input = 'SELECT'
@@ -13,7 +13,7 @@ class TestQuery(unittest.TestCase):
         self.assertEquals(Query.is_reserved(actual_input), False)
 
 
-class TestSelect(unittest.TestCase):
+class TestSelect(TestCase):
 
     def test_check_query_happy_path(self):
         actual_input = '''
@@ -44,4 +44,4 @@ class TestSelect(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

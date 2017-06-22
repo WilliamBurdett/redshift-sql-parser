@@ -14,7 +14,9 @@ class Conditional(Component):
         for operator in self.operators:
             if operator in self.sql:
                 fields = self.sql.split(operator)
-
+                break
+        if len(fields) != 2:
+            return 1
         return 2
 
 

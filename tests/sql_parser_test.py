@@ -1,5 +1,5 @@
 import sql_parser
-from unittest import TestCase
+from unittest import TestCase, main
 
 
 class TestSqlParser(TestCase):
@@ -12,4 +12,4 @@ class TestSqlParser(TestCase):
         self.assertEqual(sql_parser.run_parser(actual_input), 0)
 
 if __name__ == '__main__':
-    unittest.main()
+    main()

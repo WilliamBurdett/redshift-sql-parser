@@ -1,5 +1,5 @@
 from table_name import TableName
-from unittest import TestCase
+from unittest import TestCase, main
 
 
 class TestQuery(TestCase):
@@ -94,3 +94,6 @@ class TestQuery(TestCase):
         actual_input = 'schema. table_name'
         table_name = TableName(actual_input)
         self.assertEquals(table_name.check_validity(), 1)
+
+if __name__ == '__main__':
+    main()

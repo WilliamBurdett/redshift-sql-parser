@@ -1,1 +1,9 @@
+venv
+__pycache__
 .idea
+*.pyc
+
+temp-docker-compose.yml
+tasks/local_settings.py
+local_settings.py
+

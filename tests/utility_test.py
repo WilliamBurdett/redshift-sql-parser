@@ -1,7 +1,6 @@
-from unittest import TestCase
+from unittest import TestCase, main
 
 import utility
-import unittest
 
 
 class TestCheckSpacesEncasedByQuotes(TestCase):
@@ -99,4 +98,4 @@ class GetNextSection(TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    main()
