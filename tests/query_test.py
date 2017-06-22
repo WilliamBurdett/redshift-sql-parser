@@ -1,4 +1,4 @@
-from query import Query, Select
+from sql_parser.query import Query, Select
 from unittest import TestCase, main
 
 

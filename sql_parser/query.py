@@ -1,11 +1,12 @@
-from component import Component
-from table_name import TableName
-from utility import get_string_between_substrings, get_string_after_substring, \
+from .component import Component
+from .table_name import TableName
+from .utility import get_string_between_substrings, \
+    get_string_after_substring, \
     get_next_section
-from column_list import ColumnList
-from parse_error import ParseError
+from .column_list import ColumnList
+from .parse_error import ParseError
 from abc import ABCMeta, abstractmethod
-from reserved_keywords import reserved_keywords
+from .reserved_keywords import reserved_keywords
 
 
 def query_factory(sql):

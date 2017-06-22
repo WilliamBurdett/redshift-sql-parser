@@ -1,5 +1,5 @@
-from utility import check_bracket_order
-from component import Component
+from .utility import check_bracket_order
+from .component import Component
 
 
 class Conditional(Component):
@@ -17,7 +17,7 @@ class Conditional(Component):
                 break
         if len(fields) != 2:
             return 1
-        return 2
+        return 0
 
 
 class ConditionalSection(Component):

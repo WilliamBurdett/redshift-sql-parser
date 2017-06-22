@@ -1,4 +1,4 @@
-from table_name import TableName
+from sql_parser.table_name import TableName
 from unittest import TestCase, main
 
 

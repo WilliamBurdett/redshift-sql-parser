@@ -1,5 +1,5 @@
-from component import Component
-from utility import spaces_encased_by_quotes, get_string_between_substrings
+from .component import Component
+from .utility import spaces_encased_by_quotes, get_string_between_substrings
 
 
 class TableName(Component):

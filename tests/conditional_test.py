@@ -1,4 +1,4 @@
-from conditional import Conditional
+from sql_parser.conditional import Conditional
 from unittest import TestCase, main
 
 

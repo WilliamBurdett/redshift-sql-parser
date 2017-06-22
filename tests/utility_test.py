@@ -1,6 +1,6 @@
 from unittest import TestCase, main
 
-import utility
+from sql_parser import utility
 
 
 class TestCheckSpacesEncasedByQuotes(TestCase):

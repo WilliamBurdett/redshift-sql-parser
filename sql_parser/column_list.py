@@ -1,5 +1,5 @@
-from component import Component
-from utility import spaces_encased_by_quotes
+from .component import Component
+from .utility import spaces_encased_by_quotes
 
 
 class ColumnList(Component):
