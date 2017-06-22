@@ -1,29 +1,33 @@
 from .utility import check_bracket_order
 from .component import Component
+from .reponse import Response
 
 
 class Conditional(Component):
     operators = ['>=', '<=', '!=', '=', '>', '<']
 
-    def check_validity(self):
+    def generate_response(self):
         if not self.sql[0].isspace():
-            return 1
+            self.response = Response('No space between operator and field', 1)
         elif not self.sql[-1:].isspace():
-            return 1
+            self.response = Response('No space between operator and field', 1)
         fields = []
         for operator in self.operators:
             if operator in self.sql:
                 fields = self.sql.split(operator)
                 break
         if len(fields) != 2:
-            return 1
-        return 0
+            self.response = Response('Too many fields', 1)
+        if self.response is None:
+            self.response = Response.okay()
 
 
 class ConditionalSection(Component):
-    def check_validity(self):
-        if check_bracket_order(self.sql) == 1:
-            return 1
+    def generate_response(self):
+        response = check_bracket_order(self.sql)
+        if response != Response.okay():
+            self.response = response
+            return
 
         # Once we check the bracket format, they are unimportant on
         # if the query will compile
@@ -34,6 +38,8 @@ class ConditionalSection(Component):
             for or_split in and_split.split('OR'):
                 conditionals.append(Conditional(or_split))
         for conditional in conditionals:
-            if conditional.check_conditional() == 1:
-                return 1
-        return 0
+            response = conditional.check_validity()
+            if response != Response.okay():
+                self.response = response
+                return
+        self.response = Response.okay()

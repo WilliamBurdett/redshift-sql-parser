@@ -1,3 +1,6 @@
+from sql_parser.reponse import Response
+
+
 def get_string_between_substrings(string, first, last):
     try:
         start = string.index(first) + len(first)
@@ -35,11 +38,11 @@ def check_bracket_order(conditional_section):
             bracket_stack.append(index)
         elif character == ')':
             if len(bracket_stack) == 0:
-                return 1
+                return Response('Brackets don\' match', 1)
             bracket_stack.pop()
     if len(bracket_stack) != 0:
-        return 1
-    return 0
+        return Response('Brackets don\' match', 1)
+    return Response.okay()
 
 
 def get_next_section(sql, current_keyword, optional_keywords):

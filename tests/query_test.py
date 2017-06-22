@@ -1,6 +1,8 @@
 from sql_parser.query import Query, Select
 from unittest import TestCase, main
 
+from sql_parser.reponse import Response
+
 
 class TestQuery(TestCase):
 
@@ -22,7 +24,7 @@ class TestSelect(TestCase):
         '''
         select = Select(actual_input)
         select.check_validity()
-        self.assertEquals(select.is_valid, True)
+        self.assertEquals(select.response, Response.okay())
 
     def test_check_query_unhappy_path(self):
         actual_input = '''
@@ -31,7 +33,8 @@ class TestSelect(TestCase):
         '''
         select = Select(actual_input)
         select.check_validity()
-        self.assertEquals(select.is_valid, False)
+        self.assertEquals(select.response,
+                          Response('ColumnList not properly made',1))
 
     def test_check_inner_query(self):
         actual_input = '''
@@ -40,7 +43,7 @@ class TestSelect(TestCase):
         '''
         select = Select(actual_input)
         select.check_validity()
-        self.assertEquals(select.is_valid, True)
+        self.assertEquals(select.response, Response.okay())
 
 
 if __name__ == '__main__':

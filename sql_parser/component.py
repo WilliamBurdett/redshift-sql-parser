@@ -6,8 +6,14 @@ class Component:
 
     def __init__(self, component_string):
         self.sql = component_string
-        self.is_valid = None
+        self.response = None
+
+    def check_validity(self):
+        if self.response is not None:
+            return self.response
+        self.generate_response()
+        return self.response
 
     @abstractmethod
-    def check_validity(self):
+    def generate_response(self):
         pass

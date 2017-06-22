@@ -4,7 +4,7 @@ from .utility import get_string_between_substrings, \
     get_string_after_substring, \
     get_next_section
 from .column_list import ColumnList
-from .parse_error import ParseError
+from .reponse import Response
 from abc import ABCMeta, abstractmethod
 from .reserved_keywords import reserved_keywords
 
@@ -18,7 +18,7 @@ def query_factory(sql):
     elif trimmed.index('INSERT') == 0:
         return Insert(sql)
     else:
-        return ParseError('Failure to read query')
+        return Response('Failure to read query', 1)
 
 
 class Query:
@@ -46,7 +46,7 @@ class Select(Component):
         if component_string[0] == '(':
             self.sql = self.sql[1:-1]
 
-    def check_validity(self):
+    def generate_response(self):
         components = []
         moving_sql = self.sql
         component_string = get_string_between_substrings(moving_sql, 'SELECT',
@@ -56,6 +56,7 @@ class Select(Component):
         component_string = get_next_section(moving_sql, 'FROM', ['JOIN',
                                                                  'WHERE',
                                                                  'ORDER BY'])
+
         if component_string[0] == '(':
             components.append(Select(component_string))
         else:
@@ -65,14 +66,13 @@ class Select(Component):
             component.check_validity()
 
         for component in components:
-            if component.is_valid is None:
-                self.is_valid = False
-                print("I didn't finish?")
-            elif not component.is_valid:
-                self.is_valid = False
-                print("OH NO")
-        if self.is_valid is None:
-            self.is_valid = True
+            if component.response is None:
+                self.response = Response(
+                    'Critical Failure: I didn\'t finish?', 1)
+            elif component.response != Response.okay():
+                self.response = component.response
+        if self.response is None:
+            self.response = Response.okay()
 
         # get next keyword
 

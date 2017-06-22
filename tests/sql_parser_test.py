@@ -1,6 +1,8 @@
 from sql_parser import sql_parser
 from unittest import TestCase, main
 
+from sql_parser.reponse import Response
+
 
 class TestSqlParser(TestCase):
 
@@ -9,7 +11,7 @@ class TestSqlParser(TestCase):
         SELECT *
         FROM schema.table
         '''
-        self.assertEqual(sql_parser.run_parser(actual_input), 0)
+        self.assertEqual(sql_parser.run_parser(actual_input), Response.okay())
 
 if __name__ == '__main__':
     main()

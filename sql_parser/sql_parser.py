@@ -3,15 +3,15 @@
 # Figure out type
 # Call check query on it
 from .query import query_factory
-from .parse_error import ParseError
+from .reponse import Response
 
 
 def run_parser(sql):
-    query = query_factory(sql)
-    if isinstance(query, ParseError):
-        print(query.message)
-        return 1
-    return 0
+    response = query_factory(sql)
+    if response != Response.okay():
+        print(response.message)
+        return response.code
+    return Response.okay()
 
 
 string = 'schema.table alias'
